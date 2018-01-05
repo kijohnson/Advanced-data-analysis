@@ -22,17 +22,16 @@ RUN;
 PROC EXPORT DATA= WORK.STARBUCKS 
             OUTFILE= "T:\Teaching\Courses\Advanced_Data_Analysis\Class 1
  Getting Started\Class one\starbucks_datasets\starbucks_stata.dta" 
-            DBMS=TAB REPLACE;
+            DBMS=dta REPLACE;
      PUTNAMES=YES;
 
 RUN;
 
 
-
 PROC EXPORT DATA= WORK.STARBUCKS 
             OUTFILE= "T:\Teaching\Courses\Advanced_Data_Analysis\Class 1
  Getting Started\Class one\starbucks_datasets\starbucks_spss.sav" 
-            DBMS=TAB REPLACE;
+            DBMS=sav REPLACE;
      PUTNAMES=YES;
 
 RUN;
