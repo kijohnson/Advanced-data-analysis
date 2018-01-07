@@ -12,6 +12,14 @@ run;
 
 PROC EXPORT DATA= WORK.STARBUCKS 
             OUTFILE= "T:\Teaching\Courses\Advanced_Data_Analysis\Class 1
+ Getting Started\Class one\starbucks_datasets\starbucks_csv.csv" 
+            DBMS=csv REPLACE;
+     PUTNAMES=YES;
+
+RUN;
+
+PROC EXPORT DATA= WORK.STARBUCKS 
+            OUTFILE= "T:\Teaching\Courses\Advanced_Data_Analysis\Class 1
  Getting Started\Class one\starbucks_datasets\starbucks_tab.txt" 
             DBMS=TAB REPLACE;
      PUTNAMES=YES;
