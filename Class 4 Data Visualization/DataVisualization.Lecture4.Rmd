@@ -1,0 +1,222 @@
+---
+title: "Data Visualization, Lecture 4"
+output: html_notebook
+author: "Matt Wyczalkowski <m.wyczalkowski@wustl.edu>"
+---
+
+My favorite ggplot2 reference: http://www.cookbook-r.com/Graphs/
+
+Load the ggplot2 library
+```{r}
+library(ggplot2)
+```
+# Read in BRFSS data
+Get rid of all rows which have any missing values (NA)
+```{r}
+data.fn<-"dat/BRFSS.48K.csv"
+BRFSS<-read.csv(data.fn)
+BRFSS <- BRFSS[rowSums(is.na(BRFSS))==0,]
+print(head(BRFSS))
+```
+# Bar Plot
+## Basic plot of counts
+Visualize employment status counts
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_bar(aes(x=employed))
+p
+```
+Can't see the X-labels.
+
+## Rotate X-label text
+Jumping ahead a bit to themes
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_bar(aes(x=employed))
+p <- p + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+p
+```
+## Order columns
+To change the order of the bars, change the order of factor levels by specifying the order explicitly.
+
+### By an arbitrary order
+```{r}
+my.levels=c(
+"Retired",
+"Refused",
+"A student",
+"A homemaker",
+"Self-employed",
+"Unable to work",
+"Employed for wages",
+"Not asked or Missing",
+"Out of work for 1 year or more",
+"Out of work for less than 1 year"
+)
+BRFSS$employed <- factor(BRFSS$employed, levels = my.levels)
+p <- ggplot(data=BRFSS)
+p <- p + geom_bar(aes(x=employed))
+p <- p + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+p
+```
+
+
+# Scatter Plot
+
+## Basic scatter plot of weight vs. height
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=height, y=weight))
+p
+```
+## Add color
+We wish to indicate diabetes status with the color of the point.  
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=height, y=weight, color=diabetes_short_label))
+p
+```
+## Use RColorBrewer Palette
+Want to use RColorBrewer palette "set 1", with specified order of values
+
+To see all RColorBrewer Palettes:
+```{r}
+library(RColorBrewer)
+display.brewer.all()
+```
+
+```{r}
+my.levels=c("NA",
+"No",
+"Yes",
+"pre/borderline",
+"Yes pregnancy",
+"Refused",
+"Unknown"
+)
+BRFSS$diabetes_short_label <- factor(BRFSS$diabetes_short_label, levels = my.levels)
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=height, y=weight, color=diabetes_short_label)) + scale_color_brewer(palette="Set1")
+p
+```
+## Change axis labels
+Add units to axis labels.  Also, change legend name.
+```{r}
+my.levels=c("NA",
+"No",
+"Yes",
+"pre/borderline",
+"Yes pregnancy",
+"Refused",
+"Unknown"
+)
+BRFSS$diabetes_short_label <- factor(BRFSS$diabetes_short_label, levels = my.levels)
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=height, y=weight, color=diabetes_short_label)) + scale_color_brewer(palette="Set1", name="Diabetes Status")
+p <- p + xlab("Height [m]") + ylab("Weight [kg]")
+p
+```
+
+
+# Violin Plot
+What's the distribution of weight for different diabetes conditions?
+
+## Plot weights as points
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=diabetes_short_label, y=weight))
+p
+```
+This is hard to see because of overlap.  Let's jitter all points - add random displacement in X direction.  Also add color.
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=diabetes_short_label, y=weight, color=diabetes_short_label), position = position_jitter(w = 0.3, h = 0))
+p <- p + scale_color_brewer(palette="Set1", name="Diabetes Status")
+p
+```
+This is still hard to see because of overlapping points.  Reduce opacity (alpha) to make points more transparent
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=diabetes_short_label, y=weight, color=diabetes_short_label), position = position_jitter(w = 0.3, h = 0), alpha=0.1)
+p <- p + scale_color_brewer(palette="Set1", name="Diabetes Status")
+p
+```
+Reduce alpha even more...
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_point(aes(x=diabetes_short_label, y=weight, color=diabetes_short_label), position = position_jitter(w = 0.3, h = 0), alpha=0.01)
+p <- p + scale_color_brewer(palette="Set1", name="Diabetes Status")
+p
+```
+## Violin plot
+Violin plots display the distribution (like a sideways histogram)
+
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_violin(aes(x=diabetes_short_label, y=weight))
+p
+```
+### Adjust colors and theme to make it pretty
+
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_violin(aes(x=diabetes_short_label, y=weight, fill=diabetes_short_label), color=NA) + guides(fill=FALSE)
+p <- p + scale_fill_brewer(palette="Set1", name="Diabetes Status")
+p <- p + theme_bw() + xlab("Diabetes Status") + ylab("Weight [kg]")
+p <- p + theme(panel.grid.major.x = element_blank())
+p
+```
+
+### Superpose additional geoms
+
+```{r}
+p <- ggplot(data=BRFSS)
+p <- p + geom_violin(aes(x=diabetes_short_label, y=weight, fill=diabetes_short_label), color=NA) + guides(fill=FALSE)
+
+p <- p + geom_point(aes(x=diabetes_short_label, y=weight, color=diabetes_short_label), position = position_jitter(w = 0.3, h = 0), alpha=0.01) + guides(color=FALSE)
+
+p <- p + scale_fill_brewer(palette="Set1") + scale_color_brewer(palette="Set1", name="Diabetes Status") 
+p <- p + theme_bw() + xlab("Diabetes Status") + ylab("Weight [kg]")
+p <- p + theme(panel.grid.major.x = element_blank())
+p
+```
+
+# Homework Assignment
+
+## Assignment 1: Bar plot with calculated order
+Create bar plot of counts of `income` column.  Order the columns by descending order, so that the most counts (tallest bar) is on the left.
+
+## Assignment 2: Bar plots of given height
+Suppose we want to calculage the total weight of all individuals per state.  We can add up all weights for each state with the following,
+```{r}
+library(plyr)
+state.weight = ddply(BRFSS, "state", summarise, tot.weight=sum(weight))
+head(state.weight)
+```
+Create bar plot with the total weight for each state indicated by bar height.  
+
+*Hint* Note `geom_bar` has the default argument, `geom_bar(stat="count")`.
+
+## Assignment 3: Scatter plot with age
+Create a scatter plot of height and weight, with age indicated for each point by some other aesthetic.  Try using aesthetics such as color, fill, size, shape, and alpha (opacity) to emphasize features which may be interesting.
+
+## Assignment 4: Compare sexes
+Create a scatter plot of height and weight which illustrates the distibution of the two sexes
+
+* Using aesthetics of your choice
+* Draw two separate plots, one for each sex
+* **Bonus**: Use facets to draw separate plots for each sex
+
+## Assignment 5: Bubble plots
+Create a bubble plot, which displays counts of observations two categorical variables as the size of a geom_point. We can obtain counts of income and employed status, for instance, with,
+```{r}
+library(plyr)
+income.employed.count = count(BRFSS,  c("employed", "income"))
+head(income.employed.count)
+```
+
+## Assignment 6: Superpose boxplots over violin plots
+Draw box plots (geom_boxplot) over top of the violin plots.
+
+## Assignment 7: Indicate significant differences
+**Bonus** Evaluate whether the weight distribution between any two pairs of diabetes status categories on the violin plots is significantly different. Devise a way to indicate which pairs of distributions are significantly different.
