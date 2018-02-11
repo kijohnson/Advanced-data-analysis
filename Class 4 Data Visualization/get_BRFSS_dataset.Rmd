@@ -24,7 +24,7 @@ library(foreign)
 ###Read in the BRFSS SAS dataset 
 
 ```{r}
-BRFSS.fn<-"C:/Users/kijohnson/Desktop/LLCP2016.xpt"  # this may need to be adjusted 
+BRFSS.fn<-"C:/Users/kijohnson/Desktop/Advanced-Data-Analysis-master/LLCP2016.xpt" #this may need to be adjusted 
 BRFSS2016<-read.xport(BRFSS.fn)  
 ```
 ###Take a 10% random sample of the BRFSS2016 dataset and list all the variables 
@@ -64,7 +64,6 @@ table(BRFSS2016$state)  #numbers cross check
 ```
 ###Label other variables that we may use: EMPLOY1, INCOME2, SEATBELT, BMI5, DIABETE3 (code book can be accessed here: https://www.cdc.gov/brfss/annual_data/2016/pdf/codebook16_llcp.pdf)
 ```{r}
-
 BRFSS_samp$employed <- factor(
   BRFSS_samp$EMPLOY1,
   levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 99),
@@ -146,12 +145,13 @@ BRFSS_samp$age <- BRFSS_samp$X_AGE80   # really just rename it
 Delete columns which have been converted
 Write csv file for Matt for class demo
 ```{r}
-drops <- c("X_STATE", "EMPLOY1", "INCOME2", "SEATBELT", "DIABETE3", "X_BMI5", "HTM4", "WTKG3", "SEX", "X_AGE80")
-BRFSS_samp <- BRFSS_samp[, !(names(BRFSS_samp) %in% drops)]
+drops <- names(BRFSS_samp) %in% c("X_STATE", "EMPLOY1", "INCOME2", "SEATBELT", "DIABETE3", "X_BMI5", "HTM4", "WTKG3", "SEX", "X_AGE80")
+BRFSS_samp2 <- BRFSS_samp[!drops]
 ```
 
 ```{r}
-write.csv(BRFSS_samp, "dat/BRFSS.48K.csv", row.names=FALSE, quote=TRUE)
-write.table(BRFSS_samp, "dat/BRFSS.48K.tsv", row.names=FALSE, quote=FALSE, sep="\t")
+write.csv(BRFSS_samp2, "C:/Users/kijohnson/Desktop/Advanced-Data-Analysis-master/Class 4 Data Visualization/dat/BRFSS.48K.csv", row.names=FALSE, quote=TRUE)
+write.table(BRFSS_samp2, "dat/BRFSS.48K.tsv", row.names=FALSE, quote=FALSE, sep="\t")
+BRFSS3<-read.csv("dat/BRFSS.48K.csv")
 ```
 
