@@ -16,7 +16,7 @@ data.fn<-"https://raw.githubusercontent.com/kijohnson/Advanced-Data-Analysis/mas
 BRFSS<-read.csv(data.fn)
 ```
 
-###Load the oreign library to access the read.xport function
+###Load the foreign library to access the read.xport function
 ```{r}
 library(foreign)
 ```
@@ -24,7 +24,7 @@ library(foreign)
 ###Read in the BRFSS SAS dataset 
 
 ```{r}
-BRFSS.fn<-"../dat/LLCP2016.XPT"  # this may need to be adjusted 
+BRFSS.fn<-"C:/Users/kijohnson/Desktop/LLCP2016.xpt"  # this may need to be adjusted 
 BRFSS2016<-read.xport(BRFSS.fn)  
 ```
 ###Take a 10% random sample of the BRFSS2016 dataset and list all the variables 
