@@ -126,12 +126,12 @@ Xiaoyan Wang
 <span class="kw">library</span>(readr)  <span class="co">#for read txt file</span>
 <span class="kw">library</span>(knitr)  <span class="co">#for creating nicer tables</span>
 <span class="kw">library</span>(tidyverse)  <span class="co"># for various packages</span></code></pre></div>
-<pre><code>## -- Attaching packages --------------------------------------------------------------------------------------- tidyverse 1.2.0 --</code></pre>
+<pre><code>## -- Attaching packages ------------------------------------------------------------------------------------------------------------------------------------------------------------- tidyverse 1.2.0 --</code></pre>
 <pre><code>## v ggplot2 2.2.1     v purrr   0.2.4
 ## v tibble  1.3.4     v dplyr   0.7.4
 ## v tidyr   0.7.2     v stringr 1.2.0
 ## v ggplot2 2.2.1     v forcats 0.2.0</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------------------------------------------------------ tidyverse_conflicts() --
+<pre><code>## -- Conflicts ---------------------------------------------------------------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nnet)  <span class="co">#Multinomial logistic regresison</span>
@@ -142,29 +142,101 @@ Xiaoyan Wang
 ## 
 ##     select</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(erer)  <span class="co">#Average marginal effects for the rdinal logistic regression</span></code></pre></div>
-<pre><code>## Error in library(erer): there is no package called 'erer'</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Breast_SEER_Class6 &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;/Users/candice_wang/Box Sync/2018 Spring/TA/Class 6_my/Breast_SEER_Class6.txt&quot;</span>, 
+<pre><code>## Loading required package: lmtest</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: 'zoo'</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Breast_SEER_Class6 &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;T:/Teaching/Courses/Advanced_Data_Analysis/Advanced-Data-Analysis-master/Class 6 GLM Oridnal and Multinomial/Breast_SEER_Class6.txt&quot;</span>, 
     <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">escape_double =</span> <span class="ot">FALSE</span>, <span class="dt">trim_ws =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Error: '/Users/candice_wang/Box Sync/2018 Spring/TA/Class 6_my/Breast_SEER_Class6.txt' does not exist.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `Age recode with single ages and 85+` = col_character(),
+##   `Race recode (White, Black, Other)` = col_character(),
+##   Sex = col_character(),
+##   `Year of diagnosis` = col_integer(),
+##   `Derived AJCC Stage Group, 7th ed (2010+)` = col_character(),
+##   `First malignant primary indicator` = col_character(),
+##   `Patient ID` = col_character(),
+##   `Insurance Recode (2007+)` = col_character(),
+##   `Marital status at diagnosis` = col_character(),
+##   `% Families below poverty ACS 2011-15` = col_character()
+## )</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(Breast_SEER_Class6)</code></pre></div>
-<pre><code>## Error in str(Breast_SEER_Class6): object 'Breast_SEER_Class6' not found</code></pre>
+<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    36366 obs. of  10 variables:
+##  $ Age recode with single ages and 85+     : chr  &quot;56 years&quot; &quot;45 years&quot; &quot;50 years&quot; &quot;60 years&quot; ...
+##  $ Race recode (White, Black, Other)       : chr  &quot;White&quot; &quot;White&quot; &quot;White&quot; &quot;White&quot; ...
+##  $ Sex                                     : chr  &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; ...
+##  $ Year of diagnosis                       : int  2014 2014 2014 2014 2014 2014 2014 2014 2014 2014 ...
+##  $ Derived AJCC Stage Group, 7th ed (2010+): chr  &quot;IA&quot; &quot;IA&quot; &quot;UNK Stage&quot; &quot;IA&quot; ...
+##  $ First malignant primary indicator       : chr  &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; ...
+##  $ Patient ID                              : chr  &quot;00000394&quot; &quot;00005024&quot; &quot;00009348&quot; &quot;00044791&quot; ...
+##  $ Insurance Recode (2007+)                : chr  &quot;Insured&quot; &quot;Insured&quot; &quot;Insured&quot; &quot;Insured&quot; ...
+##  $ Marital status at diagnosis             : chr  &quot;Married (including common law)&quot; &quot;Divorced&quot; &quot;Married (including common law)&quot; &quot;Divorced&quot; ...
+##  $ % Families below poverty ACS 2011-15    : chr  &quot;00495&quot; &quot;00495&quot; &quot;00781&quot; &quot;00495&quot; ...
+##  - attr(*, &quot;spec&quot;)=List of 2
+##   ..$ cols   :List of 10
+##   .. ..$ Age recode with single ages and 85+     : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ Race recode (White, Black, Other)       : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ Sex                                     : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ Year of diagnosis                       : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_integer&quot; &quot;collector&quot;
+##   .. ..$ Derived AJCC Stage Group, 7th ed (2010+): list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ First malignant primary indicator       : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ Patient ID                              : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ Insurance Recode (2007+)                : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ Marital status at diagnosis             : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ % Families below poverty ACS 2011-15    : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   ..$ default: list()
+##   .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_guess&quot; &quot;collector&quot;
+##   ..- attr(*, &quot;class&quot;)= chr &quot;col_spec&quot;</code></pre>
 </div>
 <div id="data-management" class="slide section level2">
 <h2>Data Management</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Look at the data
 <span class="kw">names</span>(Breast_SEER_Class6) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;Race&quot;</span>, <span class="st">&quot;Sex&quot;</span>, <span class="st">&quot;Diagnosis_year&quot;</span>, <span class="st">&quot;Stage&quot;</span>, 
-    <span class="st">&quot;First&quot;</span>, <span class="st">&quot;PatientID&quot;</span>, <span class="st">&quot;Insur&quot;</span>, <span class="st">&quot;Marital&quot;</span>, <span class="st">&quot;Poverty&quot;</span>)</code></pre></div>
-<pre><code>## Error in names(Breast_SEER_Class6) &lt;- c(&quot;Age&quot;, &quot;Race&quot;, &quot;Sex&quot;, &quot;Diagnosis_year&quot;, : object 'Breast_SEER_Class6' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(Breast_SEER_Class6<span class="op">$</span>Insur)</code></pre></div>
-<pre><code>## Error in table(Breast_SEER_Class6$Insur): object 'Breast_SEER_Class6' not found</code></pre>
+    <span class="st">&quot;First&quot;</span>, <span class="st">&quot;PatientID&quot;</span>, <span class="st">&quot;Insur&quot;</span>, <span class="st">&quot;Marital&quot;</span>, <span class="st">&quot;Poverty&quot;</span>)
+<span class="kw">table</span>(Breast_SEER_Class6<span class="op">$</span>Insur)</code></pre></div>
+<pre><code>## 
+##             Any Medicaid Insurance status unknown                  Insured 
+##                     5342                      922                    25983 
+##     Insured/No specifics                Uninsured 
+##                     3336                      783</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(Breast_SEER_Class6<span class="op">$</span>Stage)</code></pre></div>
-<pre><code>## Error in table(Breast_SEER_Class6$Stage): object 'Breast_SEER_Class6' not found</code></pre>
+<pre><code>## 
+##         0        IA        IB       IIA       IIB      IIIA      IIIB 
+##        32     15928       827      7828      4515      2459       702 
+##      IIIC    IIINOS        IV UNK Stage 
+##       866        29      2033      1121</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(Breast_SEER_Class6<span class="op">$</span>Sex)</code></pre></div>
-<pre><code>## Error in table(Breast_SEER_Class6$Sex): object 'Breast_SEER_Class6' not found</code></pre>
+<pre><code>## 
+## Female   Male 
+##  36154    212</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(Breast_SEER_Class6<span class="op">$</span>Race)</code></pre></div>
-<pre><code>## Error in table(Breast_SEER_Class6$Race): object 'Breast_SEER_Class6' not found</code></pre>
+<pre><code>## 
+##                                                     Black 
+##                                                      4747 
+## Other (American Indian/AK Native, Asian/Pacific Islander) 
+##                                                      3927 
+##                                                   Unknown 
+##                                                       426 
+##                                                     White 
+##                                                     27266</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(Breast_SEER_Class6<span class="op">$</span>First)</code></pre></div>
-<pre><code>## Error in table(Breast_SEER_Class6$First): object 'Breast_SEER_Class6' not found</code></pre>
+<pre><code>## 
+##    No   Yes 
+##  4173 32193</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Transfer the character variables to numeric variables and rocode the</span>
 <span class="co"># factor variables Label the variables</span>
 Data &lt;-<span class="st"> </span>Breast_SEER_Class6 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Male_cat =</span> <span class="kw">factor</span>(Sex), <span class="dt">First_cat =</span> <span class="kw">factor</span>(First), 
@@ -179,28 +251,54 @@ Data &lt;-<span class="st"> </span>Breast_SEER_Class6 <span class="op">%&gt;%</s
         <span class="dv">0</span>, <span class="kw">ifelse</span>(Insur <span class="op">==</span><span class="st"> &quot;Any Medicaid&quot;</span>, <span class="dv">1</span>, <span class="kw">ifelse</span>(Insur <span class="op">==</span><span class="st"> &quot;Insured&quot;</span> <span class="op">|</span><span class="st"> </span>Insur <span class="op">==</span><span class="st"> </span>
 <span class="st">            &quot;Insured/No specifics&quot;</span>, <span class="dv">2</span>, <span class="ot">NA</span>))), <span class="dt">Insur_cat =</span> <span class="kw">factor</span>(Insur_cat, 
         <span class="dt">levels =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Uninsured&quot;</span>, <span class="st">&quot;Medicaid&quot;</span>, <span class="st">&quot;Insured&quot;</span>)))</code></pre></div>
-<pre><code>## Error in eval(lhs, parent, parent): object 'Breast_SEER_Class6' not found</code></pre>
 </div>
 <div id="get-the-complete-data-drop-the-cases-who-were-did-not-have-first-primary-diagnosis-of-breast-cancer-and-with-missing-values-on-any-variables-used" class="slide section level2">
 <h2>Get the complete data: drop the cases who were did not have first primary diagnosis of breast cancer and with missing values on any variables used</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Data1 &lt;-<span class="st"> </span>Data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(First_cat <span class="op">!=</span><span class="st"> &quot;No&quot;</span> <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(Stage_cat) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(Insur_cat) <span class="op">&amp;</span><span class="st"> </span>
 <span class="st">    </span><span class="op">!</span><span class="kw">is.na</span>(Black_cat) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(Age_num) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(Male_cat))</code></pre></div>
-<pre><code>## Error in eval(lhs, parent, parent): object 'Data' not found</code></pre>
 </div>
 <div id="execute-a-mutilnomial-logistic-regression" class="slide section level2">
 <h2>Execute a mutilnomial logistic regression</h2>
 <h3 id="below-we-use-the-multinom-function-from-the-nnet-package-to-estimate-a-multinomial-logistic-regression-model.">Below we use the multinom function from the <em>nnet</em> package to estimate a multinomial logistic regression model.</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Re-leveling data, choose stage IV as reference
-<span class="kw">attach</span>(Data1)</code></pre></div>
-<pre><code>## Error in attach(Data1): object 'Data1' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Stage_cat_re &lt;-<span class="st"> </span><span class="kw">relevel</span>(Stage_cat, <span class="dt">ref =</span> <span class="st">&quot;StageIV&quot;</span>)</code></pre></div>
-<pre><code>## Error in relevel(Stage_cat, ref = &quot;StageIV&quot;): object 'Stage_cat' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Execute a mutilnomial regression with insurance as independent variable
+<span class="kw">attach</span>(Data1)
+Stage_cat_re &lt;-<span class="st"> </span><span class="kw">relevel</span>(Stage_cat, <span class="dt">ref =</span> <span class="st">&quot;StageIV&quot;</span>)
+## Execute a mutilnomial regression with insurance as independent variable
 ## and demographics as covariates
 mod &lt;-<span class="st"> </span><span class="kw">multinom</span>(Stage_cat_re <span class="op">~</span><span class="st"> </span>Insur_cat <span class="op">+</span><span class="st"> </span>Age_num <span class="op">+</span><span class="st"> </span>Male_cat <span class="op">+</span><span class="st"> </span>Black_cat)</code></pre></div>
-<pre><code>## Error in eval(predvars, data, env): object 'Stage_cat_re' not found</code></pre>
+<pre><code>## # weights:  28 (18 variable)
+## initial  value 41353.160792 
+## iter  10 value 34593.988823
+## iter  20 value 32759.082902
+## final  value 32632.669527 
+## converged</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod)</code></pre></div>
-<pre><code>## Error in summary(mod): object 'mod' not found</code></pre>
+<pre><code>## Call:
+## multinom(formula = Stage_cat_re ~ Insur_cat + Age_num + Male_cat + 
+##     Black_cat)
+## 
+## Coefficients:
+##          (Intercept) Insur_catMedicaid Insur_catInsured     Age_num
+## StageI    -0.0921594         0.3687076        1.4917311  0.02065472
+## StageII    1.8071000         0.1876238        0.8579903 -0.01065464
+## StageIII   1.1695755         0.1903330        0.6583665 -0.02071053
+##          Male_catMale Black_catBlack
+## StageI     -1.2396732     -0.6959072
+## StageII    -0.4673369     -0.4301328
+## StageIII   -0.4171249     -0.3243130
+## 
+## Std. Errors:
+##          (Intercept) Insur_catMedicaid Insur_catInsured     Age_num
+## StageI     0.2061019         0.1440671        0.1377516 0.003073017
+## StageII    0.2000188         0.1368302        0.1307601 0.003068158
+## StageIII   0.2336731         0.1660253        0.1586118 0.003518932
+##          Male_catMale Black_catBlack
+## StageI      0.2697247     0.06669388
+## StageII     0.2542965     0.06638277
+## StageIII    0.3118653     0.07866827
+## 
+## Residual Deviance: 65265.34 
+## AIC: 65301.34</code></pre>
 </div>
 <div id="interpretations" class="slide section level2">
 <h2>Interpretations</h2>
@@ -218,13 +316,18 @@ mod &lt;-<span class="st"> </span><span class="kw">multinom</span>(Stage_cat_re 
 <ul>
 <li>Use Z-test to test individual parameter. â The p-value from such test indicates whether or not we can reject the null hypothesis of the parameter=0 relative to the effect on the base outcome at a given level of statistical significance.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">summary</span>(mod)<span class="op">$</span>coefficients<span class="op">/</span><span class="kw">summary</span>(mod)<span class="op">$</span>standard.errors</code></pre></div>
-<pre><code>## Error in summary(mod): object 'mod' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 2-tailed Z test</span>
-p &lt;-<span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="kw">abs</span>(z), <span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
-<pre><code>## Error in pnorm(abs(z), 0, 1): object 'z' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p</code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object 'p' not found</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">summary</span>(mod)<span class="op">$</span>coefficients<span class="op">/</span><span class="kw">summary</span>(mod)<span class="op">$</span>standard.errors
+<span class="co"># 2-tailed Z test</span>
+p &lt;-<span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="kw">abs</span>(z), <span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="dv">2</span>
+p</code></pre></div>
+<pre><code>##           (Intercept) Insur_catMedicaid Insur_catInsured      Age_num
+## StageI   6.547635e-01        0.01048902     0.000000e+00 1.800871e-11
+## StageII  0.000000e+00        0.17030744     5.324852e-11 5.153443e-04
+## StageIII 5.581029e-07        0.25162579     3.313087e-05 3.969484e-09
+##          Male_catMale Black_catBlack
+## StageI   4.305358e-06   0.000000e+00
+## StageII  6.609725e-02   9.197487e-11
+## StageIII 1.810542e-01   3.747187e-05</code></pre>
 </div>
 <div id="hypothesis-test-wald-test-and-likelihood-ratio-test" class="slide section level2">
 <h2>Hypothesis test: Wald test and likelihood ratio test</h2>
@@ -238,14 +341,87 @@ p &lt;-<span class="st"> </span>(<span class="dv">1</span> <span class="op">-</s
 <h2>Odds ratio</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## extract the coefficients from the model and exponentiate
 <span class="kw">exp</span>(<span class="kw">coef</span>(mod))</code></pre></div>
-<pre><code>## Error in coef(mod): object 'mod' not found</code></pre>
+<pre><code>##          (Intercept) Insur_catMedicaid Insur_catInsured   Age_num
+## StageI     0.9119598          1.445865         4.444783 1.0208695
+## StageII    6.0927526          1.206380         2.358416 0.9894019
+## StageIII   3.2206251          1.209652         1.931634 0.9795025
+##          Male_catMale Black_catBlack
+## StageI      0.2894788      0.4986219
+## StageII     0.6266689      0.6504227
+## StageIII    0.6589386      0.7230239</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Example</span>
 <span class="kw">str</span>(<span class="kw">summary</span>(mod))</code></pre></div>
-<pre><code>## Error in summary(mod): object 'mod' not found</code></pre>
+<pre><code>## List of 31
+##  $ n              : num [1:3] 6 0 4
+##  $ nunits         : int 11
+##  $ nconn          : num [1:12] 0 0 0 0 0 0 0 0 7 14 ...
+##  $ conn           : num [1:28] 0 1 2 3 4 5 6 0 1 2 ...
+##  $ nsunits        : num 7
+##  $ decay          : num 0
+##  $ entropy        : logi FALSE
+##  $ softmax        : logi TRUE
+##  $ censored       : logi FALSE
+##  $ value          : num 32633
+##  $ wts            : num [1:28] 0 0 0 0 0 ...
+##  $ convergence    : int 0
+##  $ fitted.values  : num [1:29830, 1:4] 0.0413 0.072 0.0398 0.0407 0.1514 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:29830] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##   .. ..$ : chr [1:4] &quot;StageIV&quot; &quot;StageI&quot; &quot;StageII&quot; &quot;StageIII&quot;
+##  $ residuals      : num [1:29830, 1:4] -0.0413 0.928 -0.0398 -0.0407 -0.1514 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:29830] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##   .. ..$ : chr [1:4] &quot;StageIV&quot; &quot;StageI&quot; &quot;StageII&quot; &quot;StageIII&quot;
+##  $ lev            : chr [1:4] &quot;StageIV&quot; &quot;StageI&quot; &quot;StageII&quot; &quot;StageIII&quot;
+##  $ call           : language multinom(formula = Stage_cat_re ~ Insur_cat + Age_num + Male_cat +      Black_cat)
+##  $ terms          :Classes 'terms', 'formula'  language Stage_cat_re ~ Insur_cat + Age_num + Male_cat + Black_cat
+##   .. ..- attr(*, &quot;variables&quot;)= language list(Stage_cat_re, Insur_cat, Age_num, Male_cat, Black_cat)
+##   .. ..- attr(*, &quot;factors&quot;)= int [1:5, 1:4] 0 1 0 0 0 0 0 1 0 0 ...
+##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. .. ..$ : chr [1:5] &quot;Stage_cat_re&quot; &quot;Insur_cat&quot; &quot;Age_num&quot; &quot;Male_cat&quot; ...
+##   .. .. .. ..$ : chr [1:4] &quot;Insur_cat&quot; &quot;Age_num&quot; &quot;Male_cat&quot; &quot;Black_cat&quot;
+##   .. ..- attr(*, &quot;term.labels&quot;)= chr [1:4] &quot;Insur_cat&quot; &quot;Age_num&quot; &quot;Male_cat&quot; &quot;Black_cat&quot;
+##   .. ..- attr(*, &quot;order&quot;)= int [1:4] 1 1 1 1
+##   .. ..- attr(*, &quot;intercept&quot;)= int 1
+##   .. ..- attr(*, &quot;response&quot;)= int 1
+##   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: R_GlobalEnv&gt; 
+##   .. ..- attr(*, &quot;predvars&quot;)= language list(Stage_cat_re, Insur_cat, Age_num, Male_cat, Black_cat)
+##   .. ..- attr(*, &quot;dataClasses&quot;)= Named chr [1:5] &quot;factor&quot; &quot;factor&quot; &quot;numeric&quot; &quot;factor&quot; ...
+##   .. .. ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;Stage_cat_re&quot; &quot;Insur_cat&quot; &quot;Age_num&quot; &quot;Male_cat&quot; ...
+##  $ weights        : num [1:29830, 1] 1 1 1 1 1 1 1 1 1 1 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:29830] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##   .. ..$ : NULL
+##  $ deviance       : num 65265
+##  $ rank           : int 6
+##  $ lab            : chr [1:4] &quot;StageIV&quot; &quot;StageI&quot; &quot;StageII&quot; &quot;StageIII&quot;
+##  $ coefnames      : chr [1:6] &quot;(Intercept)&quot; &quot;Insur_catMedicaid&quot; &quot;Insur_catInsured&quot; &quot;Age_num&quot; ...
+##  $ vcoefnames     : chr [1:6] &quot;(Intercept)&quot; &quot;Insur_catMedicaid&quot; &quot;Insur_catInsured&quot; &quot;Age_num&quot; ...
+##  $ contrasts      :List of 3
+##   ..$ Insur_cat: chr &quot;contr.treatment&quot;
+##   ..$ Male_cat : chr &quot;contr.treatment&quot;
+##   ..$ Black_cat: chr &quot;contr.treatment&quot;
+##  $ xlevels        :List of 3
+##   ..$ Insur_cat: chr [1:3] &quot;Uninsured&quot; &quot;Medicaid&quot; &quot;Insured&quot;
+##   ..$ Male_cat : chr [1:2] &quot;Female&quot; &quot;Male&quot;
+##   ..$ Black_cat: chr [1:2] &quot;Non-Black&quot; &quot;Black&quot;
+##  $ edf            : num 18
+##  $ AIC            : num 65301
+##  $ is.binomial    : logi FALSE
+##  $ digits         : int 7
+##  $ coefficients   : num [1:3, 1:6] -0.0922 1.8071 1.1696 0.3687 0.1876 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:3] &quot;StageI&quot; &quot;StageII&quot; &quot;StageIII&quot;
+##   .. ..$ : chr [1:6] &quot;(Intercept)&quot; &quot;Insur_catMedicaid&quot; &quot;Insur_catInsured&quot; &quot;Age_num&quot; ...
+##  $ standard.errors: num [1:3, 1:6] 0.206 0.2 0.234 0.144 0.137 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:3] &quot;StageI&quot; &quot;StageII&quot; &quot;StageIII&quot;
+##   .. ..$ : chr [1:6] &quot;(Intercept)&quot; &quot;Insur_catMedicaid&quot; &quot;Insur_catInsured&quot; &quot;Age_num&quot; ...
+##  - attr(*, &quot;class&quot;)= chr &quot;summary.multinom&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 95% CI of Medicaid effect on having stage I vs.stage IV</span>
 <span class="kw">exp</span>(<span class="kw">summary</span>(mod)<span class="op">$</span>coefficients[<span class="st">&quot;StageI&quot;</span>, <span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">summary</span>(mod)<span class="op">$</span>standard.errors[<span class="st">&quot;StageI&quot;</span>, 
     <span class="dv">2</span>])</code></pre></div>
-<pre><code>## Error in summary(mod): object 'mod' not found</code></pre>
+<pre><code>## [1] 1.090178 1.445865 1.917599</code></pre>
 </div>
 <div id="interpretations-1" class="slide section level2">
 <h2>Interpretations</h2>
@@ -284,7 +460,8 @@ p &lt;-<span class="st"> </span>(<span class="dv">1</span> <span class="op">-</s
 <h2>Marginal effect at representative values (MER)</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MER &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Insur_cat =</span> <span class="st">&quot;Insured&quot;</span>, <span class="dt">Age_num =</span> <span class="dv">50</span>, <span class="dt">Male_cat =</span> <span class="st">&quot;Male&quot;</span>, <span class="dt">Black_cat =</span> <span class="st">&quot;Black&quot;</span>)
 <span class="kw">predict</span>(mod, <span class="dt">newdata =</span> MER, <span class="st">&quot;probs&quot;</span>)</code></pre></div>
-<pre><code>## Error in predict(mod, newdata = MER, &quot;probs&quot;): object 'mod' not found</code></pre>
+<pre><code>##   StageIV    StageI   StageII  StageIII 
+## 0.1401811 0.2303644 0.4819420 0.1475125</code></pre>
 </div>
 <div id="overview-of-ordinal-outcome-variables" class="slide section level2">
 <h2>Overview of ordinal outcome variables</h2>
@@ -312,10 +489,28 @@ p &lt;-<span class="st"> </span>(<span class="dv">1</span> <span class="op">-</s
 </div>
 <div id="execute-a-mutilnomial-logistic-regression-1" class="slide section level2">
 <h2>Execute a mutilnomial logistic regression</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 &lt;-<span class="st"> </span><span class="kw">polr</span>(Stage_cat <span class="op">~</span><span class="st"> </span>Insur_cat <span class="op">+</span><span class="st"> </span>Age_num <span class="op">+</span><span class="st"> </span>Male_cat <span class="op">+</span><span class="st"> </span>Black_cat, <span class="dt">Hess =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Error in eval(predvars, data, env): object 'Stage_cat' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod1)</code></pre></div>
-<pre><code>## Error in summary(mod1): object 'mod1' not found</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 &lt;-<span class="st"> </span><span class="kw">polr</span>(Stage_cat <span class="op">~</span><span class="st"> </span>Insur_cat <span class="op">+</span><span class="st"> </span>Age_num <span class="op">+</span><span class="st"> </span>Male_cat <span class="op">+</span><span class="st"> </span>Black_cat, <span class="dt">Hess =</span> <span class="ot">TRUE</span>)
+<span class="kw">summary</span>(mod1)</code></pre></div>
+<pre><code>## Call:
+## polr(formula = Stage_cat ~ Insur_cat + Age_num + Male_cat + Black_cat, 
+##     Hess = TRUE)
+## 
+## Coefficients:
+##                      Value Std. Error t value
+## Insur_catMedicaid -0.19755   0.079987  -2.470
+## Insur_catInsured  -0.79789   0.076110 -10.483
+## Age_num           -0.02755   0.001299 -21.205
+## Male_catMale       0.76243   0.141069   5.405
+## Black_catBlack     0.35840   0.032644  10.979
+## 
+## Intercepts:
+##                  Value    Std. Error t value 
+## StageI|StageII    -2.1790   0.0997   -21.8543
+## StageII|StageIII  -0.3523   0.0988    -3.5642
+## StageIII|StageIV   0.7988   0.1003     7.9640
+## 
+## Residual Deviance: 65410.35 
+## AIC: 65426.35</code></pre>
 </div>
 <div id="hypothesis-test-1" class="slide section level2">
 <h2>Hypothesis test</h2>
@@ -324,27 +519,37 @@ p &lt;-<span class="st"> </span>(<span class="dv">1</span> <span class="op">-</s
 <li>The p-value from such test indicates whether or not we can reject the null hypothesis of parameter=0 at a given level of statistical significance.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## store table
-ctable &lt;-<span class="st"> </span><span class="kw">coef</span>(<span class="kw">summary</span>(mod1))</code></pre></div>
-<pre><code>## Error in summary(mod1): object 'mod1' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## calculate and store p values
-p &lt;-<span class="st"> </span><span class="kw">pnorm</span>(<span class="kw">abs</span>(ctable[, <span class="st">&quot;t value&quot;</span>]), <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>) <span class="op">*</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
-<pre><code>## Error in pnorm(abs(ctable[, &quot;t value&quot;]), lower.tail = FALSE): object 'ctable' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p</code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object 'p' not found</code></pre>
+ctable &lt;-<span class="st"> </span><span class="kw">coef</span>(<span class="kw">summary</span>(mod1))
+## calculate and store p values
+p &lt;-<span class="st"> </span><span class="kw">pnorm</span>(<span class="kw">abs</span>(ctable[, <span class="st">&quot;t value&quot;</span>]), <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>) <span class="op">*</span><span class="st"> </span><span class="dv">2</span>
+p</code></pre></div>
+<pre><code>## Insur_catMedicaid  Insur_catInsured           Age_num      Male_catMale 
+##      1.351736e-02      1.028754e-25     8.512785e-100      6.493769e-08 
+##    Black_catBlack    StageI|StageII  StageII|StageIII  StageIII|StageIV 
+##      4.831746e-28     7.075016e-106      3.650220e-04      1.665806e-15</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## combined table
-ctable &lt;-<span class="st"> </span><span class="kw">cbind</span>(ctable, <span class="st">`</span><span class="dt">p value</span><span class="st">`</span> =<span class="st"> </span>p)</code></pre></div>
-<pre><code>## Error in cbind(ctable, `p value` = p): object 'ctable' not found</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># default method gives profiled CIs</span>
+ctable &lt;-<span class="st"> </span><span class="kw">cbind</span>(ctable, <span class="st">`</span><span class="dt">p value</span><span class="st">`</span> =<span class="st"> </span>p)
+<span class="co"># default method gives profiled CIs</span>
 ci &lt;-<span class="st"> </span><span class="kw">confint</span>(mod1)</code></pre></div>
-<pre><code>## Error in confint(mod1): object 'mod1' not found</code></pre>
+<pre><code>## Waiting for profiling to be done...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ci</code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object 'ci' not found</code></pre>
+<pre><code>##                         2.5 %      97.5 %
+## Insur_catMedicaid -0.35421896 -0.04063548
+## Insur_catInsured  -0.94700405 -0.64861127
+## Age_num           -0.03009566 -0.02500413
+## Male_catMale       0.48530952  1.03855851
+## Black_catBlack     0.29439524  0.42235928</code></pre>
 </div>
 <div id="odds-ratio-and-95cis" class="slide section level2">
 <h2>Odds ratio and 95%CIs</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## odds ratios
 <span class="kw">exp</span>(<span class="kw">cbind</span>(<span class="st">`</span><span class="dt">Odds ratio</span><span class="st">`</span> =<span class="st"> </span><span class="kw">coef</span>(mod1), <span class="kw">confint.default</span>(mod1, <span class="dt">level =</span> <span class="fl">0.95</span>)))</code></pre></div>
-<pre><code>## Error in coef(mod1): object 'mod1' not found</code></pre>
+<pre><code>##                   Odds ratio     2.5 %    97.5 %
+## Insur_catMedicaid  0.8207359 0.7016471 0.9600372
+## Insur_catInsured   0.4502766 0.3878777 0.5227137
+## Age_num            0.9728283 0.9703545 0.9753084
+## Male_catMale       2.1434786 1.6257007 2.8261661
+## Black_catBlack     1.4310322 1.3423400 1.5255846</code></pre>
 </div>
 <div id="interpretation" class="slide section level2">
 <h2>Interpretation</h2>
@@ -352,13 +557,13 @@ ci &lt;-<span class="st"> </span><span class="kw">confint</span>(mod1)</code></p
 <li>Exp(B) above was estimated, meaning compare odds from low to high.</li>
 <li>Examples</li>
 <li><em>Continous variable</em></li>
-<li>The odds of having stage I versus combined outcomes stage II to IV are 0.973 times greater with one-year increase in age, holding other variables constant.</li>
+<li>The odds of being diagnosed at stage I is 0.973 times the odss of being diagnosed at stages II to IV with each one-year increase in age, holding other variables constant.</li>
 <li><em>OR</em></li>
-<li>The odds of having stage I and II versus combined outcomes stage III and IV are 0.973 times greater with one-year increase in age, holding other variables constant.</li>
+<li>The odds of being diagnosed at stage I or II is 0.973 times the odds of being diagnosed at stages III to IV with each one-year increase in age, holding all other variables constant.</li>
 <li><em>Categorical variable</em></li>
-<li>The odds of having stage I versus combined outcomes stage II to IV are 0.450 times greater for patients with private insurance than the ones without insurance, holding other variables constant.</li>
+<li>The odds of being diagnosed at stage I are 0.450 times the odds of being diagnosed at combined outcomes stage II to IV for patients with private insurance than those without insurance at diagnosis, holding all other variables constant.</li>
 <li><em>OR</em></li>
-<li>The odds of having stage I and II versus combined outcomes stage III and IV are 0.450 times greater for patients with private insurance than the ones without insurance, holding other variables constant.</li>
+<li>The odds of being diagnosed at stage I and II are 0.450 times the odds of being diagnosed at stages III to IV for patients with private insurance than those without insurance at diagnosis, holding other variables constant.</li>
 </ul>
 </div>
 <div id="marginal-effect-at-the-mean-mem-calculate-by-hand-based-on-the-structural-function" class="slide section level2">
@@ -371,14 +576,25 @@ ci &lt;-<span class="st"> </span><span class="kw">confint</span>(mod1)</code></p
 <h2>Marginal effect at representative values (MER)</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MER &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Insur_cat =</span> <span class="st">&quot;Insured&quot;</span>, <span class="dt">Age_num =</span> <span class="dv">50</span>, <span class="dt">Male_cat =</span> <span class="st">&quot;Male&quot;</span>, <span class="dt">Black_cat =</span> <span class="st">&quot;Black&quot;</span>)
 <span class="kw">predict</span>(mod1, <span class="dt">newdata =</span> MER, <span class="st">&quot;probs&quot;</span>)</code></pre></div>
-<pre><code>## Error in predict(mod1, newdata = MER, &quot;probs&quot;): object 'mod1' not found</code></pre>
+<pre><code>##    StageI   StageII  StageIII   StageIV 
+## 0.2451597 0.4235151 0.1958349 0.1354903</code></pre>
 </div>
 <div id="average-marginal-effect-ame" class="slide section level2">
 <h2>Average marginal effect (AME)</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AME &lt;-<span class="st"> </span><span class="kw">ocME</span>(mod1)</code></pre></div>
-<pre><code>## Error in ocME(mod1): could not find function &quot;ocME&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AME</code></pre></div>
-<pre><code>## Error in eval(expr, envir, enclos): object 'AME' not found</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AME &lt;-<span class="st"> </span><span class="kw">ocME</span>(mod1)
+AME</code></pre></div>
+<pre><code>##                   effect.StageI effect.StageII effect.StageIII
+## Insur_catMedicaid         0.049         -0.025          -0.015
+## Insur_catInsured          0.191         -0.068          -0.071
+## Age_num                   0.007         -0.003          -0.002
+## Male_catMale             -0.178          0.053           0.071
+## Black_catBlack           -0.088          0.038           0.030
+##                   effect.StageIV
+## Insur_catMedicaid         -0.009
+## Insur_catInsured          -0.052
+## Age_num                   -0.001
+## Male_catMale               0.054
+## Black_catBlack             0.020</code></pre>
 </div>
 <div id="interpretation-1" class="slide section level2">
 <h2>Interpretation</h2>
