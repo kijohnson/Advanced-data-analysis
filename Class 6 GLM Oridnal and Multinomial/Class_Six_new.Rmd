@@ -63,7 +63,7 @@ knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, error=TRUE)
 
 ##Example
 
-- Breast cancer data downlaoded from Surveillance, Epidemiology, and End Results Program (SEER), a premier data source for cancer statistics in the US. SEER collects incidence, prevalence and survival data.
+- Breast cancer data was downlaoded from Surveillance, Epidemiology, and End Results Program (SEER), a premier data source for cancer statistics in the US. SEER collects incidence, prevalence and survival data.
 - Patients with primary breast cancer, aged between 18-65 years and diagnosed with Stage I to IV were included. 
 - In this study, we are interested in the effects of insurance status on the stage at diagnosis among breast cancer patients.
 - The covariates are comprised of patients' demographics.
@@ -238,9 +238,7 @@ predict(mod, newdata = MER, "probs")
 
 ##Ordinal logistic regression
 
-- Ordinal regression is used to predict the dependent variable with for ordered multiple categories and independent variables. 
-
-![Model link function](Picture6.png)
+- Ordinal regression is used to predict the dependent variable with for ordered multiple categories and independent variables.
 
 ##Assumptions
 - Dependent variable should be ordinal variables with more than two levels.
