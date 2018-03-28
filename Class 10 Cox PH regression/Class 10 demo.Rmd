@@ -85,13 +85,17 @@ ggsurvplot(survfit(treat_adj.mod, newdata = trt_df), data=data, conf.int = FALSE
 ```
 ##Check PH assumption using cox.zph function and plot Schoenfeld residuals by time. The PH assumption tests for non-proportionaliy of hazards over time (which mean that the HRs would depend on the time point!)
 ```{r}
-test.ph<-cox.zph(treat_adj.mod)#this code tests the PH assumption using the Schoenfeld test. For more information on this test: https://www.r-bloggers.com/cox-model-assumptions/
-test.ph
-plot(cox.zph(treat_adj.mod, transform='identity')) #this shows plots of Schoenfeld residuals by time. There should be no pattern with time if the ph assumption is met. Ref for this code is here: http://sas-and-r.blogspot.com/2010/06/example-742-testing-proportionality.html
+test.ph<-cox.zph(treat_adj.mod)
+test.ph#this code tests the PH assumption using the Schoenfeld test. The global p-value tells whether the ph assumption is violated for any of the covariates. You want this test to be non-significant. For more information on this test: https://www.r-bloggers.com/cox-model-assumptions/
+ 
+#the below code shows plots of Schoenfeld residuals by time without displaying the residuals (change to resid=TRUE to show them). There should be no pattern in the smoothed black line with time if the ph assumption is met. Read more: https://www.rdocumentation.org/packages/survival/versions/2.41-2/topics/plot.cox.zph
 
-ggcoxzph(test.ph)#Yet another way to do the Schoenfeld residual plots by time, showing the p-values from the Schoenfeld Test for each covariate
+plot(test.ph, resid=FALSE)
 
-#Additional notes: The Y-axis are the residual values for each Beta in the model. Schoenfeld residuals are defined as an individuals observed value for a covariate minus a "weighted average" of the values of the covariate for other individuals who are still at risk at time t (pg. 151 Kleinbaum and Klein Survival analysis). When you look at the graphs, you are looking for whether there is a pattern for the Beta residuals across time. For this example problem there is not, which agrees with the statistical test for the ph assumption. Sometimes the ph assumption will be violated with a p-value <0.05 by the statistical test (cox.zph) and this could be do to a very large sample size or because hazard ratios vary markedly by time--the plots can help you determine whether you can ignore the significant p-value or not. It is suggested by many (including me) that you evaluate the ph assumption both graphically and statistically.
+#Here is yet another way to do the Schoenfeld residual plots by time, showing the p-values from the Schoenfeld Test for each covariate
+ggcoxzph(test.ph)
+
+#Additional notes: When you look at the graphs, you are looking for whether there is a pattern in the smoothed Loess line across time. For this example problem there is not, which agrees with the statistical test for the ph assumption. Sometimes the ph assumption will be violated with a p-value <0.05 by the statistical test (cox.zph) and this could be do to a very large sample size or because hazard ratios vary markedly by time--the plots can help you determine whether you can ignore the significant p-value or not. It is suggested by many (including me) that you evaluate the ph assumption both graphically and statistically.
 ```
 ##Final words--there are other diagnostic tests you can do to check for outliers and non-linearity as we did in logistic regression. I show some code for that here for your reference. See: https://www.r-bloggers.com/cox-model-assumptions/ for further details including testing for non-linearity.
 ```{r}
