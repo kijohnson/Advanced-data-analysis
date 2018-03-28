@@ -1,0 +1,102 @@
+---
+title: "Cox R Demo Class 10"
+output: html_document
+---
+
+##Introduction. This demo will again use the leukemia remission data that we used last week with the addition of a variable called log_WBC (log White Blood Cell Count), which is an important predictor of leukemia relapse and death. We will use Cox proportional hazards regression to model the hazard of leukemia relapse or death in the untreated vs. treated groups.
+#Install packages
+```{r}
+#install.packages("survival") #for survival analysis by group
+#install.packages('ggfortify') #for survival analysis by group
+#install.packages("survminer") #for pairwise diffs
+#install.packages("readxl") #for importing excel datasets
+install.packages("tidyverse")
+install.packages("lmtest")
+install.packages("stargazer")
+library(survminer)#for pairwise diffs
+library(survival) #for calculating KM values
+library(ggfortify) #for KM curves
+library(readxl) # for reading in excel file
+library(ggplot2) # for plotting KM curve
+library(tidyverse) # for various packages
+library(lmtest) #model comparison
+library(stargazer) #models presentation
+```
+##Import dataset and do datamanagment needed for this exercise
+```{r}
+#See class 10 GitHub folder for import dataset that is updated with log_WBC variable
+data <- read.csv("https://raw.githubusercontent.com/kijohnson/Advanced-Data-Analysis/master/Class%2010%20Cox%20PH%20regression/Surv_data_class9b.csv") #load data for this exercise
+
+#change group variable so the reference is treatment and the variable is more appropriately named.
+data$trt[data$Group==0]<-1
+data$trt[data$Group==1]<-0
+
+data$trt<-factor(data$trt,
+      levels = c(0,1),
+      labels = c("Treated", "Untreated"))
+```
+
+##Run univariate Cox model for examine the association between group and leukemia relapse or death. Interpret the results.
+```{r}
+treat.mod<-coxph(Surv(t, d)~trt, data, ties="breslow")#using ties = Breslow, default is Efron, which is fine but this is how it would be changed.
+summary(treat.mod)
+
+#Interpretation: Those who were not treated had a 4.5 (95% CI 2.03-10.09) times higher hazard of leukemia relapse or death than those who were treated.
+```
+##Adjust the Cox model for log_WBC and interpret the results.
+```{r}
+treat_adj.mod<-coxph(Surv(t, d)~trt + log_WBC, data, ties="breslow")
+summary(treat_adj.mod)
+
+#Interpretation: After adjusting for log_WBC, those who were not treated had a 3.6 (95% CI 1.6-8.3) times higher hazard of leukemia relapse or death than those who were treated.
+```
+##Include an interaction term in the model between Group and log_WBC to see if there is effect modification of the Hazard of leukemia death or relapse in those who were not treated vs. treated according to their log_WBC. Interpret the results.
+```{r}
+treat_int.mod<-coxph(Surv(t, d)~trt + log_WBC + log_WBC*trt, data, ties="breslow")
+summary(treat_int.mod)
+
+#Interpretation: There is no significant effect modification (p for interaction=0.510) of the HR for the association between treatment and leukemia death or remission by log_WBC.
+```
+##Compare models using the liklihood ratio test (a measure of model fit) and interpret the findings.
+```{r}
+lrtest(treat.mod, treat_adj.mod)
+#The likelihood ratio test indicates that the model that includes log_WBC significantly improves fit compared to the model with just treatment (p=1.094 x 10-7). 
+
+##Note that for the LR test to be valid, both models MUST include the same number of observations!!
+```
+##Compare coefficients between the adjusted and unadusted models (just for fun)
+```{r}
+stargazer(treat.mod, treat_adj.mod, title="Model Comparison",
+          type="text",align=TRUE,single.row=TRUE)
+```
+##Plot survival curves adjusted for mean log_WBC
+```{r}
+#from http://www.sthda.com/english/wiki/cox-proportional-hazards-model 
+# Create the new data for plotting adjusted survival curves for each treatment group using log_WBC set at the mean
+trt_df <- with(data, data.frame(trt = c("Untreated", "Treated"), log_WBC=rep(mean(log_WBC, na.rm = TRUE),2)))
+trt_df
+
+ggsurvplot(survfit(treat_adj.mod, newdata = trt_df), data=data, conf.int = FALSE, legend.labs=c("Untreated", "Treated"),  ggtheme = theme_minimal()) 
+
+#change X-axis limits for fun
+ggsurvplot(survfit(treat_adj.mod, newdata = trt_df), data=data, conf.int = FALSE, legend.labs=c("Untreated", "Treated"), xlim = c(0, 22), ggtheme = theme_minimal()) 
+
+#We can see from these curves after adjusting for log_WBC, that at almost all time points there is a higher survival probability in the treated group than in the untreated group.
+```
+##Check PH assumption using cox.zph function and plot Schoenfeld residuals by time. 
+```{r}
+test.ph<-cox.zph(treat_adj.mod)#this code tests the PH assumption using the Schoenfeld test. For more information on this test: https://www.r-bloggers.com/cox-model-assumptions/
+test.ph
+plot(cox.zph(treat_adj.mod, transform='identity')) #this shows plots of Schoenfeld residuals by time. There should be no pattern with time if the ph assumption is met. Ref for this code is here: http://sas-and-r.blogspot.com/2010/06/example-742-testing-proportionality.html
+
+ggcoxzph(test.ph)#Yet another way to do the Schoenfeld residual plots by time, showing the p-values from the Schoenfeld Test for each covariate
+
+#Additional notes: The Y-axis are the residual values for each Beta in the model. Schoenfeld residuals are defined as an individuals observed value for a covariate minus a "weighted average" of the values of the covariate for other individuals who are still at risk at time t (pg. 151 Kleinbaum and Klein Survival analysis). When you look at the graphs, you are looking for whether there is a pattern for the Beta residuals across time. For this example problem there is not, which agrees with the statistical test for the ph assumption. Sometimes the ph assumption will be violated with a p-value <0.05 by the statistical test (cox.zph) and this could be do to a very large sample size or because hazard ratios vary markedly by time--the plots can help you determine whether you can ignore the significant p-value or not. It is suggested by many (including me) that you evaluate the ph assumption both graphically and statistically.
+```
+##Final words--there are other diagnostic tests you can do to check for outliers and non-linearity as we did in logistic regression. I show some code for that here for your reference. See: https://www.r-bloggers.com/cox-model-assumptions/ for further details including testing for non-linearity.
+```{r}
+#check for influential observations
+ggcoxdiagnostics(treat_adj.mod, type = "deviance", sline=FALSE, ggtheme = theme_bw())#the pattern should look symmetric around zero, which it mostly does given this is a small dataset
+```
+
+
