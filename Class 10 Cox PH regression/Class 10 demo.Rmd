@@ -83,7 +83,7 @@ ggsurvplot(survfit(treat_adj.mod, newdata = trt_df), data=data, conf.int = FALSE
 
 #We can see from these curves after adjusting for log_WBC, that at almost all time points there is a higher survival probability in the treated group than in the untreated group.
 ```
-##Check PH assumption using cox.zph function and plot Schoenfeld residuals by time. 
+##Check PH assumption using cox.zph function and plot Schoenfeld residuals by time. The PH assumption tests for non-proportionaliy of hazards over time (which mean that the HRs would depend on the time point!)
 ```{r}
 test.ph<-cox.zph(treat_adj.mod)#this code tests the PH assumption using the Schoenfeld test. For more information on this test: https://www.r-bloggers.com/cox-model-assumptions/
 test.ph
